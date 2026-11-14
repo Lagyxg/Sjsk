@@ -10,17 +10,17 @@ from aiogram.filters import CommandStart
 from aiogram.types import KeyboardButton, Message, ReplyKeyboardMarkup, User
 
 # --- НАСТРОЙКИ ---
-TOKEN = os.getenv("BOT_TOKEN", "9057929494:AAEiCHIHK0z3kRODCd5A21-BTggFZnZYuKY")
+TOKEN = os.getenv("BOT_TOKEN", "ВСТАВЬ_ТОКЕН_ОТ_BOTFATHER")
 # кому приходят сообщения: ID через запятую (можно задать переменной ADMIN_IDS в Railway)
 ADMIN_IDS = [int(x) for x in os.getenv("ADMIN_IDS", "1288679956,7331102691").replace(" ", "").split(",") if x]
 
 BUTTONS = ["Сотрудничество", "Фото/видео", "Переходник", "ТГК"]
 
 PROMPTS = {
-    "Сотрудничество": "Опиши, что хочешь предложить. Можно текстом, фото или видео 👇",
-    "Фото/видео": "Отправь своё фото или видео 👇",
-    "Переходник": "Отправь, что нужно для переходника 👇",
-    "ТГК": "Отправь сообщение по поводу ТГК 👇",
+    "Сотрудничество": "Опиши, что хочешь предложить в качестве сотрудничестве",
+    "Фото/видео": "Отправь своё фото или видео хохлов",
+    "Переходник": "https://t.me/mertvihohol",
+    "ТГК": "Актуальная ссылка на Телеграм канал: https://t.me/+iPzgzEt6z9IyZjFi ",
 }
 
 ALBUM_WAIT = 1.5  # сколько секунд ждём остальные файлы альбома
@@ -70,7 +70,7 @@ async def deliver(bot: Bot, user: User, chat_id: int, message_ids: list[int]) ->
 @dp.message(CommandStart())
 async def start(message: Message):
     await message.answer(
-        "Привет! Выбери нужный пункт на клавиатуре ниже 👇", reply_markup=keyboard
+        "Здарова, это бот-предложка канала Дохлые хрюшки. Тут ты можешь предложить свои фото/видео, предложить сотрудничество, а так же найти актуальные ссылки на переходник и на наш телеграм канал.", reply_markup=keyboard
     )
 
 
