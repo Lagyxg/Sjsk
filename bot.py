@@ -10,16 +10,17 @@ from aiogram.filters import CommandStart
 from aiogram.types import KeyboardButton, Message, ReplyKeyboardMarkup, User
 
 # --- НАСТРОЙКИ ---
-TOKEN = os.getenv("BOT_TOKEN", "9057929494:AAEiCHIHK0z3kRODCd5A21-BTggFZnZYuKY")
-ADMIN_IDS = [int(x) for x in os.getenv("ADMIN_IDS", "1288679956,7331102691").replace(" ", "").split(",") if x]  # куда приходят сообщения (твой ID или ID чата)
+TOKEN = os.getenv("BOT_TOKEN", "ВСТАВЬ_ТОКЕН_ОТ_BOTFATHER")
+# кому приходят сообщения: ID через запятую (можно задать переменной ADMIN_IDS в Railway)
+ADMIN_IDS = [int(x) for x in os.getenv("ADMIN_IDS", "1288679956,7331102691").replace(" ", "").split(",") if x]
 
 BUTTONS = ["Сотрудничество", "Фото/видео", "Переходник", "ТГК"]
 
 PROMPTS = {
-    "Сотрудничество": "Опиши, что хочешь предложить в качестве сотрудничестве",
-    "Фото/видео": "Отправь своё фото или видео хохлов",
-    "Переходник": "https://t.me/mertvihohol",
-    "ТГК": "Актуальная ссылка на Телеграм канал: https://t.me/+iPzgzEt6z9IyZjFi ",
+    "Сотрудничество": "Опиши, что хочешь предложить. Можно текстом, фото или видео 👇",
+    "Фото/видео": "Отправь своё фото или видео 👇",
+    "Переходник": "Отправь, что нужно для переходника 👇",
+    "ТГК": "Отправь сообщение по поводу ТГК 👇",
 }
 
 ALBUM_WAIT = 1.5  # сколько секунд ждём остальные файлы альбома
@@ -55,19 +56,21 @@ async def deliver(bot: Bot, user: User, chat_id: int, message_ids: list[int]) ->
         f"ID: <code>{user.id}</code>"
     )
 
-    try:
-        await bot.send_message(ADMIN_IDS, header, parse_mode=ParseMode.HTML)
-        await bot.copy_messages(ADMIN_IDS, chat_id, message_ids)
-        return True
-    except TelegramAPIError:
-        logging.exception("Не удалось отправить сообщение админу")
-        return False
+    delivered = False
+    for admin_id in ADMIN_IDS:
+        try:
+            await bot.send_message(admin_id, header, parse_mode=ParseMode.HTML)
+            await bot.copy_messages(admin_id, chat_id, message_ids)
+            delivered = True
+        except TelegramAPIError:
+            logging.exception("Не удалось отправить сообщение админу %s", admin_id)
+    return delivered
 
 
 @dp.message(CommandStart())
 async def start(message: Message):
     await message.answer(
-        "Здарова, это бот-предложка канала Дохлые хрюшки. Тут ты можешь предложить свои фото/видео, предложить сотрудничество, а так же найти актуальные ссылки на переходник и на наш телеграм канал.", reply_markup=keyboard
+        "Привет! Выбери нужный пункт на клавиатуре ниже 👇", reply_markup=keyboard
     )
 
 
@@ -109,6 +112,14 @@ async def main():
     if not ADMIN_IDS or TOKEN.startswith("ВСТАВЬ"):
         raise SystemExit("Укажи BOT_TOKEN и ADMIN_IDS (в файле или переменных окружения).")
     bot = Bot(TOKEN)
+    await bot.delete_webhook()  # снимаем старый вебхук, иначе polling не заработает
+    me = await bot.get_me()
+    logging.info("Запущен бот @%s", me.username)
+    for admin_id in ADMIN_IDS:  # проверка: дойдёт ли сообщение каждому админу
+        try:
+            await bot.send_message(admin_id, "✅ Бот запущен")
+        except TelegramAPIError as e:
+            logging.error("Админу %s писать нельзя: %s", admin_id, e)
     await dp.start_polling(bot)
 
 
