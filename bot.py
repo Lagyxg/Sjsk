@@ -11,7 +11,7 @@ from aiogram.types import KeyboardButton, Message, ReplyKeyboardMarkup, User
 
 # --- НАСТРОЙКИ ---
 TOKEN = os.getenv("BOT_TOKEN", "9057929494:AAEiCHIHK0z3kRODCd5A21-BTggFZnZYuKY")
-ADMIN_ID = int(os.getenv("ADMIN_ID", "1288679956","7331102691"))  # куда приходят сообщения (твой ID или ID чата)
+ADMIN_IDS = [int(x) for x in os.getenv("ADMIN_IDS", "1288679956,7331102691").replace(" ", "").split(",") if x]  # куда приходят сообщения (твой ID или ID чата)
 
 BUTTONS = ["Сотрудничество", "Фото/видео", "Переходник", "ТГК"]
 
