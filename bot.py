@@ -106,8 +106,8 @@ async def single_message(message: Message, bot: Bot):
 
 async def main():
     logging.basicConfig(level=logging.INFO)
-    if not ADMIN_ID or TOKEN.startswith("ВСТАВЬ"):
-        raise SystemExit("Укажи BOT_TOKEN и ADMIN_ID (в файле или переменных окружения).")
+    if not ADMIN_IDS or TOKEN.startswith("ВСТАВЬ"):
+        raise SystemExit("Укажи BOT_TOKEN и ADMIN_IDS (в файле или переменных окружения).")
     bot = Bot(TOKEN)
     await dp.start_polling(bot)
 
