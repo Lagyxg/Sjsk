@@ -10,7 +10,7 @@ from aiogram.filters import CommandStart
 from aiogram.types import KeyboardButton, Message, ReplyKeyboardMarkup, User
 
 # --- НАСТРОЙКИ ---
-TOKEN = os.getenv("BOT_TOKEN", "ВСТАВЬ_ТОКЕН_ОТ_BOTFATHER")
+TOKEN = os.getenv("BOT_TOKEN", "9057929494:AAEiCHIHK0z3kRODCd5A21-BTggFZnZYuKY")
 # кому приходят сообщения: ID через запятую (можно задать переменной ADMIN_IDS в Railway)
 ADMIN_IDS = [int(x) for x in os.getenv("ADMIN_IDS", "1288679956,7331102691").replace(" ", "").split(",") if x]
 
