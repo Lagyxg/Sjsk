@@ -56,8 +56,8 @@ async def deliver(bot: Bot, user: User, chat_id: int, message_ids: list[int]) ->
     )
 
     try:
-        await bot.send_message(ADMIN_ID, header, parse_mode=ParseMode.HTML)
-        await bot.copy_messages(ADMIN_ID, chat_id, message_ids)
+        await bot.send_message(ADMIN_IDS, header, parse_mode=ParseMode.HTML)
+        await bot.copy_messages(ADMIN_IDS, chat_id, message_ids)
         return True
     except TelegramAPIError:
         logging.exception("Не удалось отправить сообщение админу")
